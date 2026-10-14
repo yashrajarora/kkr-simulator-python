@@ -1,6 +1,6 @@
 ---
 name: elevator-sim
-description: Work on the kkr-simulator-py elevator dispatch simulator. Use for changes to dispatch strategies (Round Robin, Nearest Car, Nearest Car Forward Run, Nearest Car Simple, Cost Based, Balanced), the tick loop, settings, outputs, tests, requirements, efficiency and fairness measures, scenario results, the notebook, or the summary slides, or when asked how to run or test the simulator.
+description: Work on the kkr-simulator-python elevator dispatch simulator. Use for changes to dispatch strategies (Round Robin, Nearest Car, Nearest Car Forward Run, Nearest Car Simple, Cost Based, Balanced), the tick loop, settings, outputs, tests, requirements, efficiency and fairness measures, scenario results, the notebook, or the summary slides, or when asked how to run or test the simulator.
 ---
 
 # Elevator simulator

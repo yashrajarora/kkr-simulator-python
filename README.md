@@ -38,12 +38,12 @@ To run the tests:
 
 - **Requests:** the request file must be in time order, with unique passenger ids. Two requests may share a time.
 - **Eligibility:** a car is eligible only if it serves both the source and the destination. Capacity does not
-  stop an assignment. A full car can still be given a trip, and the passenger waits for a seat.
-- **Express cars:** they never stop outside their served set, and floor 1 is always in it.
+  stop an assignment. A full car can still be given a trip, and the passenger waits for a seat (FR-ASN-5).
+- **Express cars:** they never stop outside their served set, and floor 1 is always in it (FR-CAR-7).
 - **Tick order:** each tick runs alight, then board, then move, for each car in car-number order. A car that
   has a waiting passenger on its floor boards them before it moves.
 - **Movement:** a car with riders moves in their direction. A car with unboarded passengers keeps its direction
-  while a passenger is ahead, then reverses. An empty car goes to its parking floor, and
+  while a passenger is ahead, then reverses (a LOOK-style rule). An empty car goes to its parking floor, and
   stays where it stopped in NORMAL mode.
 - **No boarding or alighting time:** passengers board and alight in the same tick the car is at their floor.
 - **Strategies:**
@@ -67,7 +67,7 @@ To run the tests:
 - **Configurable boarding and alighting time.** Although not specified in the functional requirements, make the number of ticks taken to board and alight a setting. The requirements currently treat this time as out of scope, so every passenger boards and alights in the tick the car is at their floor.
 - **Energy-saving strategy.** Add a strategy that picks cars to reduce the floors travelled (the energy used), for example by giving a request to a car that is already moving toward it, and by grouping passengers so that fewer trips are needed. Compare its energy use, measured in floors travelled, with the other strategies.
 - **Test scenarios.** Build a more comprehensive test suite: cover the main flows end to end, every strategy and traffic mode, and corner cases that there was not time to test, such as simultaneous requests at the same floor, a full car at its capacity limit, and requests at the top and bottom floors.
-- **Live requests.** Accept requests while the simulation runs, through a REST interface, instead of only from a file read at the start. The request source would sit behind the interface the requirements describe, so the simulator core would not change. Live requests would need the same time-order checks as the file input.
+- **Live requests.** Accept requests while the simulation runs, through a REST interface (NFR-I2), instead of only from a file read at the start. The request source would sit behind the interface the requirements describe, so the simulator core would not change. Live requests would need the same time-order checks as the file input.
 
 ## Layout
 
