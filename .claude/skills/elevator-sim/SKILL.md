@@ -1,6 +1,6 @@
 ---
 name: elevator-sim
-description: Work on the kkr-simulator-py elevator dispatch simulator. Use for changes to dispatch strategies (Round Robin, Nearest Car, Nearest Car Forward Run, Nearest Car Simple, Cost Based, Balanced), the tick loop, settings, outputs, tests, requirements, efficiency and fairness measures, scenario results, the notebook, or the summary slides, or when asked how to run or test the simulator.
+description: Work on the kkr-simulator-python elevator dispatch simulator. Use for changes to dispatch strategies (Round Robin, Nearest Car, Nearest Car Forward Run, Nearest Car Simple, Cost Based, Balanced), the tick loop, settings, outputs, tests, requirements, efficiency and fairness measures, scenario results, the notebook, or the summary slides, or when asked how to run or test the simulator.
 ---
 
 # Elevator simulator
@@ -9,7 +9,7 @@ description: Work on the kkr-simulator-py elevator dispatch simulator. Use for c
 - Run: `python main.py` from the project root, with no arguments. Settings: `config/elevator.properties`. Request files are in `data/`.
 - Test: `python -m pytest` (config in `pytest.ini`, tests in `tests/`).
 - Runs write to `out/`, and each run overwrites the previous files. `strategy=ALL` writes one set per strategy.
-- Scenario results: `python scripts/run_scenarios.py` from any folder (about 10 seconds). It rewrites `docs/scenario_results.json`, which holds the mean and standard error over generated files for each scenario and strategy. It saves no per-run values.
+- Scenario results: `python scripts/run_scenarios.py` from any folder (about 10 seconds). It rewrites `docs/scenario_results.json`, which holds the mean and standard error over generated files for each scenario and strategy, for average wait, max wait, average total time, median total time, 95th percentile wait, floors, balance and total ticks. It saves no per-run values.
 
 ## Layout
 - `elevator/config/`: settings and car setup
@@ -31,7 +31,8 @@ description: Work on the kkr-simulator-py elevator dispatch simulator. Use for c
 ## Measures
 - Efficiency (OBJ-2): median total time, where total time = wait + travel. Average total time is also reported.
 - Fairness (OBJ-5): 95th percentile wait (nearest rank). Max wait is also reported.
-- The summary shows these as two headline lines after the table (FR-OUT-3).
+- Total ticks: the time step of the last drop-off, which is the length of the run. The summary prints it after the two headline lines.
+- The summary shows the two headline lines after the table (FR-OUT-3).
 
 ## Rules
 - Read `docs/requirements.md` before changing behaviour. If the behaviour should change, change the requirement first.
@@ -49,7 +50,7 @@ description: Work on the kkr-simulator-py elevator dispatch simulator. Use for c
 2. Re-run the tests and `python main.py` on the chosen input.
 3. Re-run `python scripts/run_scenarios.py`.
 4. Notebook (`docs/strategies.ipynb`): edit the markdown and re-run the code cells (sections 5 to 8). `nbconvert` is not installed. Run the code cells in a Python session and store the stdout and figures as outputs. The file uses CRLF line endings, so keep them when writing it back.
-5. Slides: check slides 11, 15, 17 to 24 and 26 to 30 against the new numbers. Slide 18 and 19 use `requests_big.csv`. Slides 21 to 23 use `docs/scenario_results.json`. Rush hour is the average of morning and evening rush.
+5. Slides: check slides 11, 15, 17 to 24 and 26 to 30 against the new numbers. Slides 17 to 19 use `requests_big.csv`, and slide 18 has every measure including total ticks. Slides 21, 22, 24 and the appendix use `docs/scenario_results.json`. Rush hour is the average of morning and evening rush.
 6. README.
 
 ## Git
