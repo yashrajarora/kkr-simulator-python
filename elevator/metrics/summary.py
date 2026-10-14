@@ -24,13 +24,15 @@ class Summary:
             min: smallest value.
             max: largest value.
             average: mean value.
-            p95: 95th percentile, nearest rank (FR-OUT-3).
+            median: the middle value, the typical passenger (OBJ-2).
+            p95: 95th percentile, nearest rank (FR-OUT-3, OBJ-5 for waits).
             std_dev: population standard deviation (FR-OUT-3).
         """
 
         min: int
         max: int
         average: float
+        median: float
         p95: int
         std_dev: float
 

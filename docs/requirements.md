@@ -12,9 +12,10 @@ The simulation is discrete-time and shows how real-time passenger requests are h
 ## 2. OBJECTIVES
 
 - OBJ-1 No starvation: every request is served. No passenger waits indefinitely to be picked up or dropped off.
-- OBJ-2 Efficiency: minimize total time per passenger, where total_time = wait_time + travel_time.
+- OBJ-2 Efficiency: minimize the median total time, where total_time = wait_time + travel_time. The median is the time that most passengers experience. Average total time is also reported.
 - OBJ-3 Capacity: no car exceeds its capacity.
 - OBJ-4 Direction: no wrong-way riding is possible.
+- OBJ-5 Fairness: minimize the 95th percentile wait, so that nearly every passenger is picked up soon. The maximum wait is also reported, as the strictest check on OBJ-1.
 
 
 ## 3. OUT OF SCOPE
@@ -72,13 +73,13 @@ The simulation is discrete-time and shows how real-time passenger requests are h
 - FR-ASN-4 The assignment algorithm shall be chosen at startup and used for the whole run. Options:
   - FR-ASN-4a Round Robin. Assign each passenger to the next eligible car in rotation.
   - FR-ASN-4b Nearest Car, forward run (NEAREST_CAR_FORWARD_RUN). Evaluate all eligible cars and assign the passenger to the nearest one. Distance is measured in ticks: the number of ticks until the car reaches the source floor moving in the passenger's direction, including any stops it must make first. Every tick of movement counts, including movement away from the source floor, such as a car that goes down 2 floors and then back up to serve a passenger, which is 5 ticks. Distance is never measured in floors. The distance is found by running a copy of the car forward (the forward run), so stops, seats and turns are all counted.
-  - FR-ASN-4b-E Nearest Car, floor estimate (NEAREST_CAR). Like FR-ASN-4b-S, it prefers cars that can take the passenger now. Its distance is the number of floors to the source, plus the floors to the car's turn point and back when the car is heading away from the source. This is an estimate: it does not count stops, seats or time spent at a floor, so it does not meet FR-ASN-4b.
+  - FR-ASN-4b-E Nearest Car, floor estimate (NEAREST_CAR). It first filters: only eligible cars with room for the passenger now (riders plus unboarded passengers plus one is at most capacity) are estimated. If no eligible car has room, all eligible cars are estimated, so the passenger still gets a car (FR-ASN-5). Its distance is the number of floors to the source, plus the floors to the car's turn point and back when the car is heading away from the source. This is an estimate: it does not count stops, seats or time spent at a floor, so it does not meet FR-ASN-4b.
   - FR-ASN-4b-S Nearest Car, simplified (comparison only). Same as FR-ASN-4b, but distance is the number of floors from the car to the source, and a car that can take the passenger now is preferred. This does not meet FR-ASN-4b. It is kept only to compare its results with FR-ASN-4b.
   - FR-ASN-4c Cost Based. Keep waits balanced across passengers. Minimize the maximum wait and total time, so no passenger is left far behind to improve the average. Measured by max, 95th percentile, and standard deviation of wait and total time. Each eligible car is scored as follows:
     - For each eligible car, predict the wait of the new passenger and of every passenger the car would pick up after this assignment. The longest of these waits is the car's score.
     - Choose the car where the longest wait of any passenger on it is shortest. Ties go to the lower car number.
   - FR-ASN-4d Balanced (BALANCED_STRATEGY). Trades off how soon a car can pick the passenger up against how many passengers it already carries. Each eligible car is scored as wait_time_weight x wait + car_load_weight x passengers. The wait is the number of ticks from the request until the car picks the passenger up (from the forward run). The passengers are the riders plus the unboarded passengers. The car with the lowest score is chosen, and ties go to the lower car number. Both weights default to 1.0. They are set in the code for now, not in the settings file.
-- FR-ASN-5 A request shall be assigned immediately, at the time it is made, to an eligible car. A car that can take the passenger now is preferred. If no car can, the passenger may wait on the car for a seat or for the car to turn around.
+- FR-ASN-5 A request shall be assigned immediately, at the time it is made, to an eligible car. A car that can take the passenger now is preferred. If no car can, the passenger may wait on the car for a seat or for the car to turn around. Nearest Car (FR-ASN-4b-E) is the exception: it prefers cars with room only, and it does not require the car to be heading the passenger's way.
 - FR-ASN-6 Express first. Among eligible cars, express cars that serve both the source and the destination are considered before regular cars. If any such express car can take the passenger now (FR-ASN-3), only those cars are considered. Otherwise, all such express cars are considered, even if one must turn around first. A regular car is considered only when no express car serves both floors. This rule takes precedence over FR-ASN-4a, FR-ASN-4b, FR-ASN-4b-S, and FR-ASN-4c: the assignment algorithm chooses only from the cars this rule allows, so it may not pick the nearest or lowest-cost car when that car is outside the allowed set.
 
 ### 5.5 Time
@@ -108,7 +109,7 @@ The simulation is discrete-time and shows how real-time passenger requests are h
 
 ### 5.8 Output
 - FR-OUT-1 Position log. For every time step from 0, the simulator shall log the location of every car, one comma-separated row per time step, with a header row. Format in Appendix B. The file is positions.csv for one strategy. When all strategies run (ALL), there is one file per strategy, named positions_<STRATEGY>.csv.
-- FR-OUT-3 Summary. On completion, the simulator shall write the minimum, maximum, average, 95th percentile, and standard deviation of wait time and total time to the file summary.txt. When all strategies run (ALL), the summary has one section per strategy, headed by the strategy name.
+- FR-OUT-3 Summary. On completion, the simulator shall write the minimum, maximum, average, median, 95th percentile, and standard deviation of wait time and total time to the file summary.txt. Directly after the table, the summary shows two headline lines: efficiency (OBJ-2) as the median total time, with the average, and fairness (OBJ-5) as the 95th percentile wait, with the maximum. When all strategies run (ALL), the summary has one section per strategy, headed by the strategy name.
   - The 95th percentile uses the nearest-rank method: sort the values, and take the value at position ceil(0.95 × n), counting from 1.
   - When there are fewer than 20 passengers, the 95th percentile equals the maximum, and the summary shall say so.
 
@@ -192,4 +193,4 @@ time,Car1,Car2,Car3
 ```
 
 
-Summary (FR-OUT-3): minimum, maximum, average, 95th percentile, and standard deviation of wait and total time.
+Summary (FR-OUT-3): minimum, maximum, average, median, 95th percentile, and standard deviation of wait and total time.

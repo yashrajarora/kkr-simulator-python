@@ -16,6 +16,11 @@ import statistics
 from collections import defaultdict
 from pathlib import Path
 
+import sys
+
+# Lets the script import the elevator package when it is run from any folder.
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+
 from elevator.config.config_loader import ConfigLoader
 from elevator.config.sim_config import Strategy
 from elevator.dispatch.dispatch_strategy import DispatchStrategy
@@ -149,6 +154,8 @@ def run_one(scenario: dict, seed: int, strategy: Strategy) -> dict:
         "avg_wait": summary.wait_stats.average,
         "max_wait": summary.wait_stats.max,
         "avg_total": summary.total_stats.average,
+        "median_total": summary.total_stats.median,
+        "p95_wait": summary.wait_stats.p95,
         "floors": sum(summary.floors_travelled),
         "balance": jain_index(per_car),
     }

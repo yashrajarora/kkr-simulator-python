@@ -69,3 +69,28 @@ def test_summary_flags_fewer_than_twenty_passengers():
     """FR-OUT-3: the summary says when the 95th percentile equals the maximum."""
     small = Metrics.of([], [])
     assert small.p95_is_max
+
+
+def test_stats_include_median_of_even_and_odd_counts():
+    """FR-OUT-3, OBJ-2: the median is the middle value, or the mean of the two middle values."""
+    assert Metrics.stats([1, 2, 3, 10]).median == pytest.approx(2.5)
+    assert Metrics.stats([1, 2, 10]).median == pytest.approx(2.0)
+
+
+def test_summary_has_efficiency_and_fairness_headline_lines():
+    """FR-OUT-3, OBJ-2, OBJ-5: the summary states the median total time and the 95th percentile wait."""
+    import io
+    from elevator.files.output_writer import OutputWriter
+
+    trips = [trip("a", 0, 1), trip("b", 0, 4), trip("c", 2, 9)]
+    summary = Metrics.of(trips, [5])
+    text = io.StringIO()
+    OutputWriter(text).write_summary(summary)
+
+    lines = text.getvalue().splitlines()
+    efficiency = [line for line in lines if line.startswith("Efficiency (OBJ-2): median total time")]
+    fairness = [line for line in lines if line.startswith("Fairness (OBJ-5): 95th percentile wait")]
+    assert efficiency == [f"Efficiency (OBJ-2): median total time {summary.total_stats.median:.1f} steps "
+                          f"(average {summary.total_stats.average:.2f}, wait plus travel)"]
+    assert fairness == [f"Fairness (OBJ-5): 95th percentile wait {summary.wait_stats.p95} steps "
+                        f"(maximum {summary.wait_stats.max})"]

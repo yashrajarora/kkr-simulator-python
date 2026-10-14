@@ -28,3 +28,17 @@ def test_car_heading_toward_passenger_is_measured_directly():
     chosen = NearestCarStrategy().choose_best_car_by_strategy(PassengerRequest(0, "p", 4, 5), [heading_toward, idle])
 
     assert chosen is heading_toward
+
+
+def test_car_with_room_heading_away_is_measured_with_its_turn_around():
+    """Car 1 is at floor 4 going UP with one rider to floor 5, so it has room but is heading away from a passenger
+    at floor 3 going UP. It must reach floor 5 and come back: 1 + 2 = 3 floors. Car 2 is idle at floor 7, 4 floors
+    away. Only the room filter applies, so car 1 is measured and is nearer, so it gets the request."""
+    heading_away = Car(1, 4, 2, None, None)
+    heading_away.add_trip(Trip(PassengerRequest(0, "rider", 4, 5)))
+    heading_away._board(0)
+    idle = Car(2, 7, 2, None, None)
+
+    chosen = NearestCarStrategy().choose_best_car_by_strategy(PassengerRequest(0, "p", 3, 8), [heading_away, idle])
+
+    assert chosen is heading_away

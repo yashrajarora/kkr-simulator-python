@@ -52,8 +52,10 @@ class OutputWriter:
         self._print_stats("Total time : ", summary.total_stats)
         if summary.p95_is_max:
             print("Note: fewer than 20 passengers, so the 95th percentile equals the maximum.", file=self._out)
-        print(f"Efficiency (OBJ-2): average total time {summary.total_stats.average:.2f} steps "
-              "(wait plus travel)", file=self._out)
+        print(f"Efficiency (OBJ-2): median total time {summary.total_stats.median:.1f} steps "
+              f"(average {summary.total_stats.average:.2f}, wait plus travel)", file=self._out)
+        print(f"Fairness (OBJ-5): 95th percentile wait {summary.wait_stats.p95} steps "
+              f"(maximum {summary.wait_stats.max})", file=self._out)
         print(f"Average travel time {summary.average_travel:.2f} steps", file=self._out)
         print("Floors travelled: " + self._floors_line(summary.floors_travelled), file=self._out)
         print("Observations", file=self._out)
@@ -68,7 +70,7 @@ class OutputWriter:
             stats: the statistics for that row.
         """
         print(f"{label}  min {stats.min}  max {stats.max}  avg {stats.average:.2f}  "
-              f"p95 {stats.p95}  std {stats.std_dev:.2f}", file=self._out)
+              f"median {stats.median:.1f}  p95 {stats.p95}  std {stats.std_dev:.2f}", file=self._out)
 
     @staticmethod
     def _floors_line(floors: list[int]) -> str:

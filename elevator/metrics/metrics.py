@@ -83,7 +83,7 @@ class Metrics:
 
     @staticmethod
     def stats(values: list[int]) -> Summary.Stats:
-        """Min, max, average, 95th percentile, and standard deviation of a list of values.
+        """Min, max, average, median, 95th percentile, and standard deviation of a list of values.
 
         Args:
             values: the values (may be empty).
@@ -92,9 +92,9 @@ class Metrics:
             the statistics. All zeros for an empty list.
         """
         if not values:
-            return Summary.Stats(0, 0, 0.0, 0, 0.0)
+            return Summary.Stats(0, 0, 0.0, 0.0, 0, 0.0)
         average = sum(values) / len(values)
-        return Summary.Stats(min(values), max(values), average,
+        return Summary.Stats(min(values), max(values), average, Metrics.median(values),
                              Metrics.percentile95(values), Metrics.std_dev(values, average))
 
     @staticmethod

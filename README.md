@@ -47,13 +47,16 @@ To run the tests:
   stays where it stopped in NORMAL mode.
 - **No boarding or alighting time:** passengers board and alight in the same tick the car is at their floor.
 - **Strategies:**
-  - `NEAREST_CAR` measures distance in floors, plus the detour when a car is heading away. It is an
+  - `NEAREST_CAR` first keeps only the cars with room for the passenger now (or all eligible cars if none has
+    room). Then it measures distance in floors, plus the detour when a car is heading away. It is an
     estimate and does not count stops or seats.
   - `NEAREST_CAR_FORWARD_RUN` runs a copy of each car forward, so it is exact for these rules, but it is slower.
   - `NEAREST_CAR_SIMPLE` measures floors only, as a comparison baseline.
   - `COST_BASED` and `BALANCED_STRATEGY` also use forward runs, so their cost grows with the number of cars and trips.
   - `BALANCED_STRATEGY` weights pickup time and load equally (both 1.0), set in the code.
-- **Summary:** with fewer than 20 passengers, the 95th percentile equals the maximum, and the summary says so.
+- **Summary:** two headline lines give efficiency as the median total time (OBJ-2) and fairness as the 95th
+  percentile wait (OBJ-5). With fewer than 20 passengers, the 95th percentile equals the maximum, and the
+  summary says so.
 - **Safety limit:** a run that does not finish within a computed number of ticks stops with an error, rather
   than looping forever.
 

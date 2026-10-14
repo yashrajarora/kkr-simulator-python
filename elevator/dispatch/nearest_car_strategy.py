@@ -2,8 +2,8 @@
 
 A car that is heading toward the passenger is measured by the floors to the passenger. A car that is heading
 away must first reach its turn point, the furthest floor it is committed to in its direction, and then come back.
-Cars that can take the passenger now are preferred. Ties go to the lower car number, because cars are checked in
-order and only a strictly smaller distance replaces the current best.
+Only cars with room for the passenger now are measured, unless no eligible car has room. Ties go to the lower car
+number, because cars are checked in order and only a strictly smaller distance replaces the current best.
 
 This is an estimate. It ignores stops, seats and the time spent at each floor. NEAREST_CAR_FORWARD_RUN is the exact
 version.
@@ -20,7 +20,7 @@ class NearestCarStrategy(DispatchStrategy):
     """Nearest Car (FR-ASN-4b): the car nearest to the passenger in floors, with its direction taken into account."""
 
     def choose_best_car_by_strategy(self, request: PassengerRequest, cars: list[Car]) -> Car | None:
-        """Returns the nearest car in floors, preferring cars that can take the passenger now (FR-ASN-4b).
+        """Returns the nearest car in floors, among cars with room now (FR-ASN-4b).
 
         Args:
             request: the new request.
@@ -30,8 +30,9 @@ class NearestCarStrategy(DispatchStrategy):
             the nearest car, or None if no car serves both floors of the request.
         """
         candidates = [car for car in cars if car.can_serve_request_floors(request)]
-        ready = [car for car in candidates if car.can_honor_elevator_constraints(request.source, request.direction)]
-        pool = ready or candidates
+        # Filter first: only cars with room now are measured. If none has room, the passenger waits for a seat (FR-ASN-5).
+        with_room = [car for car in candidates if car.has_room_for(1)]
+        pool = with_room or candidates
         if not pool:
             return None
         return min(pool, key=lambda car: self._floor_distance(car, request.source))
