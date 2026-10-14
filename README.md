@@ -32,7 +32,7 @@ To run the tests:
 
 ## How long I spent on the project
 
-32 hours
+35 hours
 
 ## Assumptions, simplifications and trade-offs
 
