@@ -1,12 +1,12 @@
 ---
 name: elevator-sim
-description: Work on the kkr-simulator-py elevator dispatch simulator. Use for changes to dispatch strategies (Round Robin, Nearest Car, Cost Based, Balanced), the tick loop, settings, outputs, tests, requirements, or the summary slides, or when asked how to run or test the simulator.
+description: Work on the kkr-simulator-python elevator dispatch simulator. Use for changes to dispatch strategies (Round Robin, Nearest Car, Cost Based, Balanced), the tick loop, settings, outputs, tests, requirements, or the summary slides, or when asked how to run or test the simulator.
 ---
 
 # Elevator simulator
 
 ## Run and test
-- Run: `python -m elevator.main` from the project root, with no arguments. Settings: `elevator/resources/elevator.properties`. Request files are in the same folder.
+- Run: `python main.py` from the project root, with no arguments. Settings: `config/elevator.properties`. Request files are in `data/`.
 - Test: `python -m pytest` (config in `pytest.ini`, tests in `tests/`).
 - Runs write to `out/`, and each run overwrites the previous files. `strategy=ALL` writes one set per strategy.
 

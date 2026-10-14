@@ -3,7 +3,7 @@
     python scripts/run_scenarios.py
 
 Each scenario builds its request files from fixed seeds, so the same run always gives the same numbers. The
-results are averages over the seeds. Nothing in elevator/resources or out/ is changed.
+results are averages over the seeds. Nothing in config/, data/ or out/ is changed.
 
 Only the standard library is used, and the simulator is called directly, not through the settings file.
 """

@@ -15,10 +15,10 @@ Requirements:
 - Standard library only to run the simulator.
 - `pytest` to run the tests (see `requirements-dev.txt`).
 
-Settings are read from `elevator/resources/elevator.properties`. The request files are in the same folder.
+Settings are read from `config/elevator.properties`. The request files are in the `data/` folder, and the name in `requests=` is relative to it.
 Run the simulator from the project folder:
 
-    python -m elevator.main
+    python main.py
 
 Outputs, written to the `out/` folder in the project (created on each run):
 
@@ -68,8 +68,8 @@ To run the tests:
 
 ## Layout
 
+    main.py              entry point: argument check, logging and exit codes
     elevator/
-      main.py            entry point: argument check, logging and exit codes
       runner.py          reads settings, runs one strategy or all of them, writes outputs
       config/            settings, their checks and building the cars
       model/             Car, Trip, PassengerRequest, Direction
@@ -77,6 +77,8 @@ To run the tests:
       files/             request reader and output writer
       metrics/           statistics and summary
       simulator/         tick loop, request queue and movement rules
-      resources/         settings and request files
+    config/              settings file (elevator.properties)
+    data/                request files
+    out/                 run output (created on each run)
     tests/               pytest tests
     docs/                requirements

@@ -118,7 +118,7 @@ The simulation is discrete-time and shows how real-time passenger requests are h
 Each NFR is listed with the functional section it relates to.
 
 ### 6.1 Running the program
-- NFR-E1 [NFR-U1] The simulator is run with `python -m elevator.main` and no arguments. It is run from the project folder.
+- NFR-E1 [NFR-U1] The simulator is run with `python main.py` and no arguments. It is run from the project folder.
 - NFR-E2 [NFR-U1] The simulator uses only the Python standard library. Running the tests needs `pytest`, listed in `requirements-dev.txt`.
 - NFR-E3 [NFR-U2] Exit codes: 0 on success, 1 for an error (a missing file, a bad setting, or a failed run), and 2 for a usage error (any argument given).
 - NFR-E4 [FR-OUT-1, FR-OUT-3] The run writes its output files to the `out` folder in the project, creates that folder if needed, and prints where the files are. With one strategy these are `positions.csv` and `summary.txt`. With `ALL` they are one `positions_<STRATEGY>.csv` per strategy and one `summary.txt`.
@@ -162,7 +162,7 @@ Enforced as runtime assertions in the simulator, not only by tests. A violation 
 - NFR-O3 [5.8] A run leaves no persistent state beyond the output files.
 
 ### 6.9 Usability
-- NFR-U1 [5.7] One command runs a simulation with no command-line arguments. All settings are read from a settings file (`elevator.properties` in the project's resources folder: `elevator-core/src/main/resources` in the Java version, `elevator/resources` in the Python version). The request file it names is read from the same folder. Strategy, traffic mode, and request file are the only required settings; everything else has a default.
+- NFR-U1 [5.7] One command runs a simulation with no command-line arguments. All settings are read from a settings file (`elevator.properties` in the `config` folder of the project root: `elevator-core/src/main/resources` in the Java version, `config/` in the Python version). The request file it names is read from the `data` folder. Strategy, traffic mode, and request file are the only required settings; everything else has a default.
 - NFR-U2 [5.7] Errors print a short message, not a stack trace. Passing any argument prints a short usage message.
 
 ### 6.10 Testability

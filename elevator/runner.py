@@ -1,7 +1,7 @@
 """Runs the simulation for the settings: one strategy, or every strategy in turn (FR-ASN-4, FR-OUT-1 to FR-OUT-3).
 
-The settings are read from elevator.properties, in the elevator/resources folder, and so are the request
-files. Output files go to the folder the program runs from. See ConfigLoader for the keys.
+The settings are read from elevator.properties, in the config folder, and the request files are read from the
+data folder. Both folders are in the project root. Output files go to the out folder. See ConfigLoader for the keys.
 """
 
 from pathlib import Path
@@ -27,25 +27,31 @@ SUMMARY_FILE = "summary.txt"
 # The settings value that runs every strategy in turn.
 ALL_STRATEGIES = "ALL"
 
-# Folder holding the settings file and the request files, next to this module.
-RESOURCES_DIR = Path(__file__).resolve().parent / "resources"
+# The project root, the folder that holds config, data and out.
+PROJECT_DIR = Path(__file__).resolve().parent.parent
+
+# Folder holding the settings file, in the project root.
+CONFIG_DIR = PROJECT_DIR / "config"
+
+# Folder holding the request files, in the project root.
+DATA_DIR = PROJECT_DIR / "data"
 
 # Folder for the output files, in the project root (created when a run starts).
-OUTPUT_DIR = Path(__file__).resolve().parent.parent / "out"
+OUTPUT_DIR = PROJECT_DIR / "out"
 
 
 def read_settings() -> dict[str, str]:
-    """Reads the settings file from the resources folder (NFR-U1).
+    """Reads the settings file from the config folder (NFR-U1).
 
     Returns:
         the settings, as written in the file.
 
     Raises:
-        RuntimeError: if the settings file is not in the resources folder.
+        RuntimeError: if the settings file is not in the config folder.
     """
-    path = RESOURCES_DIR / SETTINGS_FILE
+    path = CONFIG_DIR / SETTINGS_FILE
     if not path.is_file():
-        raise RuntimeError(f"settings file {SETTINGS_FILE} not found in the resources folder")
+        raise RuntimeError(f"settings file {SETTINGS_FILE} not found in the config folder")
     with open(path, encoding="utf-8") as settings_file:
         return ConfigLoader.read_properties(settings_file)
 
@@ -116,7 +122,7 @@ def _run_and_record(config: SimConfig, position_file: str, summary_writer: TextI
 
 
 def _load_passenger_requests(config: SimConfig) -> list[PassengerRequest]:
-    """Reads the request file named in the settings, from the resources folder (FR-IN-1).
+    """Reads the request file named in the settings, from the data folder (FR-IN-1).
 
     Args:
         config: the settings, which name the request file.
@@ -125,11 +131,11 @@ def _load_passenger_requests(config: SimConfig) -> list[PassengerRequest]:
         the checked requests.
 
     Raises:
-        RuntimeError: if the request file is not in the resources folder.
+        RuntimeError: if the request file is not in the data folder.
         OSError: if the file cannot be read.
     """
-    path = RESOURCES_DIR / config.requests_file
+    path = DATA_DIR / config.requests_file
     if not path.is_file():
-        raise RuntimeError(f"request file {config.requests_file} not found in the resources folder")
+        raise RuntimeError(f"request file {config.requests_file} not found in the data folder")
     with open(path, encoding="utf-8") as request_file:
         return RequestReader.read(request_file, config.floors)
