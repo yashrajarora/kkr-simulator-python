@@ -156,6 +156,7 @@ def run_one(scenario: dict, seed: int, strategy: Strategy) -> dict:
         "avg_total": summary.total_stats.average,
         "median_total": summary.total_stats.median,
         "p95_wait": summary.wait_stats.p95,
+        "total_ticks": summary.total_ticks,
         "floors": sum(summary.floors_travelled),
         "balance": jain_index(per_car),
     }

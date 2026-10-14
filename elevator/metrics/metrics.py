@@ -28,8 +28,10 @@ class Metrics:
         average_travel = 0.0
         if trips:
             average_travel = Metrics.stats(totals).average - Metrics.stats(waits).average
+        # The run lasts until the last passenger is dropped off (FR-OUT-3).
+        total_ticks = max((trip.drop_time for trip in trips), default=0)
         return Summary(Metrics.stats(waits), Metrics.stats(totals), p95_is_max, average_travel,
-                       floors_travelled, Metrics.observations(trips))
+                       total_ticks, floors_travelled, Metrics.observations(trips))
 
     @staticmethod
     def observations(trips: list[Trip]) -> list[str]:

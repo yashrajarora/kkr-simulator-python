@@ -94,3 +94,16 @@ def test_summary_has_efficiency_and_fairness_headline_lines():
                           f"(average {summary.total_stats.average:.2f}, wait plus travel)"]
     assert fairness == [f"Fairness (OBJ-5): 95th percentile wait {summary.wait_stats.p95} steps "
                         f"(maximum {summary.wait_stats.max})"]
+
+
+def test_summary_states_total_ticks_as_last_drop_off():
+    """FR-OUT-3: the total ticks is the time step of the last drop-off."""
+    import io
+    from elevator.files.output_writer import OutputWriter
+
+    trips = [trip("a", 0, 4), trip("b", 1, 11), trip("c", 2, 9)]
+    summary = Metrics.of(trips, [3])
+    assert summary.total_ticks == 11
+    text = io.StringIO()
+    OutputWriter(text).write_summary(summary)
+    assert "Total ticks: 11 (time step of the last drop-off)" in text.getvalue()

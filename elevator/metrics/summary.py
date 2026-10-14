@@ -12,6 +12,7 @@ class Summary:
         total_stats: statistics for total times (wait plus travel, OBJ-2).
         p95_is_max: True when there are fewer than 20 passengers, so the 95th percentile equals the maximum.
         average_travel: average travel time, total minus wait, per passenger.
+        total_ticks: the time step of the last drop-off, which is the length of the run.
         floors_travelled: floors moved by each car, in car-number order.
         observations: notes on the time distributions and the system behaviour, one line each.
     """
@@ -40,5 +41,6 @@ class Summary:
     total_stats: Stats
     p95_is_max: bool
     average_travel: float
+    total_ticks: int
     floors_travelled: list[int]
     observations: list[str]

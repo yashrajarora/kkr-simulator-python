@@ -109,7 +109,7 @@ The simulation is discrete-time and shows how real-time passenger requests are h
 
 ### 5.8 Output
 - FR-OUT-1 Position log. For every time step from 0, the simulator shall log the location of every car, one comma-separated row per time step, with a header row. Format in Appendix B. The file is positions.csv for one strategy. When all strategies run (ALL), there is one file per strategy, named positions_<STRATEGY>.csv.
-- FR-OUT-3 Summary. On completion, the simulator shall write the minimum, maximum, average, median, 95th percentile, and standard deviation of wait time and total time to the file summary.txt. Directly after the table, the summary shows two headline lines: efficiency (OBJ-2) as the median total time, with the average, and fairness (OBJ-5) as the 95th percentile wait, with the maximum. When all strategies run (ALL), the summary has one section per strategy, headed by the strategy name.
+- FR-OUT-3 Summary. On completion, the simulator shall write the minimum, maximum, average, median, 95th percentile, and standard deviation of wait time and total time to the file summary.txt. Directly after the table, the summary shows two headline lines: efficiency (OBJ-2) as the median total time, with the average, and fairness (OBJ-5) as the 95th percentile wait, with the maximum. It also shows the total ticks: the time step of the last drop-off, which is the length of the run. When all strategies run (ALL), the summary has one section per strategy, headed by the strategy name.
   - The 95th percentile uses the nearest-rank method: sort the values, and take the value at position ceil(0.95 × n), counting from 1.
   - When there are fewer than 20 passengers, the 95th percentile equals the maximum, and the summary shall say so.
 

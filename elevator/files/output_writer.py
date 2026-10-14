@@ -56,6 +56,7 @@ class OutputWriter:
               f"(average {summary.total_stats.average:.2f}, wait plus travel)", file=self._out)
         print(f"Fairness (OBJ-5): 95th percentile wait {summary.wait_stats.p95} steps "
               f"(maximum {summary.wait_stats.max})", file=self._out)
+        print(f"Total ticks: {summary.total_ticks} (time step of the last drop-off)", file=self._out)
         print(f"Average travel time {summary.average_travel:.2f} steps", file=self._out)
         print("Floors travelled: " + self._floors_line(summary.floors_travelled), file=self._out)
         print("Observations", file=self._out)
